@@ -1,11 +1,11 @@
 /**
- *
- * CobaltBarButtonItem.h
+ * 
+ * Cobalt-Prefix.pch
  * Cobalt
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Cobaltians
+ * Copyright (c) 2014 Cobaltians
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,33 +27,21 @@
  *
  */
 
-#import <UIKit/UIKit.h>
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
 
-@protocol CobaltBarButtonItemDelegate <NSObject>
+#import <Availability.h>
 
-@required
+#ifndef __IPHONE_5_0
+    #warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
 
-- (void)onBarButtonItemPressed:(NSString *)name;
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
 
-@end
-
-@interface CobaltBarButtonItem : UIBarButtonItem {
-    UIColor *_color;
-    UIColor *_barColor;
-}
-
-@property (strong, nonatomic) NSString *name;
-@property (assign, nonatomic) BOOL visible;
-@property (weak, nonatomic) id<CobaltBarButtonItemDelegate> delegate;
-@property (strong, nonatomic) UIButton *button;
-@property (strong, nonatomic) UILabel *badgeLabel;
-
-- (instancetype)initWithAction:(NSDictionary *)action
-                      barColor:(UIColor *)barColor
-                   andDelegate:(id<CobaltBarButtonItemDelegate>)delegate;
-
-- (void)setBadge:(NSString *)text;
-- (void)resizeBadge;
-- (void)setContent:(NSDictionary *)content;
-
-@end
+#define DEBUG_COBALT    1

@@ -1,11 +1,11 @@
 /**
  *
- * CobaltBarButtonItem.h
+ * CobaltPluginManager.h
  * Cobalt
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Cobaltians
+ * Copyright (c) 2014 Cobaltians
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,33 +27,23 @@
  *
  */
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@protocol CobaltBarButtonItemDelegate <NSObject>
+#import "CobaltViewController.h"
 
-@required
+#define kConfigurationPlugins   @"plugins"
 
-- (void)onBarButtonItemPressed:(NSString *)name;
+@interface CobaltPluginManager : NSObject
 
-@end
+@property (nonatomic, retain) NSDictionary *pluginsDictionary;
 
-@interface CobaltBarButtonItem : UIBarButtonItem {
-    UIColor *_color;
-    UIColor *_barColor;
-}
-
-@property (strong, nonatomic) NSString *name;
-@property (assign, nonatomic) BOOL visible;
-@property (weak, nonatomic) id<CobaltBarButtonItemDelegate> delegate;
-@property (strong, nonatomic) UIButton *button;
-@property (strong, nonatomic) UILabel *badgeLabel;
-
-- (instancetype)initWithAction:(NSDictionary *)action
-                      barColor:(UIColor *)barColor
-                   andDelegate:(id<CobaltBarButtonItemDelegate>)delegate;
-
-- (void)setBadge:(NSString *)text;
-- (void)resizeBadge;
-- (void)setContent:(NSDictionary *)content;
+/*!
+ @method    + (CobaltPluginManager *)sharedInstance
+ @abstract  Returns the singleton instance of the Cobalt plugin manager.
+ @result    The singleton instance of the Cobalt plugin manager.
+ */
++ (CobaltPluginManager *)sharedInstance;
+- (BOOL)onMessageFromCobaltViewController:(CobaltViewController *)viewController
+                                  andData:(NSDictionary *)data;
 
 @end

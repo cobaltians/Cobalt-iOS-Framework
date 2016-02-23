@@ -30,7 +30,7 @@
 #import <UIKit/UIKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
-#import <Cobalt/CobaltToast.h>
+#import "CobaltToast.h"
 #import "CobaltBarButtonItem.h"
 #import "BackBarButtonItem.h"
 
@@ -41,7 +41,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 //COBALT VERSION
-#define IOSCurrentVersion                   @"0.4.1"
+#define IOSCurrentVersion                   @"0.5.0"
 
 // GENERAL
 #define kJSAction                           @"action"
@@ -123,12 +123,16 @@
 #define JSControlBars                       @"bars"
 #define JSActionSetBarsVisible              @"setBarsVisible"
 #define JSActionSetBarContent               @"setBarContent"
+#define JSActionSetActionVisible            @"setActionVisible"
+#define JSActionSetActionEnabled            @"setActionEnabled"
 #define JSActionSetActionBadge              @"setActionBadge"
 #define JSActionSetActionContent            @"setActionContent"
 #define JSActionSetBars                     @"setBars"
 #define kJSBars                             @"bars"
 #define kJSContent                          @"content"
 #define kJSName                             @"name"
+#define kJSVisible                          @"visible"
+#define kJSEnabled                          @"enabled"
 #define kJSBadge                            @"badge"
 
 // TOAST

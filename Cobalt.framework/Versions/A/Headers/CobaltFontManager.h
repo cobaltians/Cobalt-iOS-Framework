@@ -1,6 +1,6 @@
 /**
  *
- * CobaltBarButtonItem.h
+ * CobaltFontManager.h
  * Cobalt
  *
  * The MIT License (MIT)
@@ -27,33 +27,15 @@
  *
  */
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol CobaltBarButtonItemDelegate <NSObject>
+#define kConfigurationFonts     @"fonts"
 
-@required
+@interface CobaltFontManager : NSObject
 
-- (void)onBarButtonItemPressed:(NSString *)name;
-
-@end
-
-@interface CobaltBarButtonItem : UIBarButtonItem {
-    UIColor *_color;
-    UIColor *_barColor;
-}
-
-@property (strong, nonatomic) NSString *name;
-@property (assign, nonatomic) BOOL visible;
-@property (weak, nonatomic) id<CobaltBarButtonItemDelegate> delegate;
-@property (strong, nonatomic) UIButton *button;
-@property (strong, nonatomic) UILabel *badgeLabel;
-
-- (instancetype)initWithAction:(NSDictionary *)action
-                      barColor:(UIColor *)barColor
-                   andDelegate:(id<CobaltBarButtonItemDelegate>)delegate;
-
-- (void)setBadge:(NSString *)text;
-- (void)resizeBadge;
-- (void)setContent:(NSDictionary *)content;
++ (UIImage *)imageWithIcon:(NSString *)identifier
+                     color:(UIColor *)color
+                   andSize:(CGSize)size;
 
 @end
