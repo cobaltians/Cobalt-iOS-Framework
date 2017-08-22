@@ -30,6 +30,7 @@
 #import <UIKit/UIKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
+#import "CobaltAlert.h"
 #import "CobaltToast.h"
 #import "CobaltBarButtonItem.h"
 #import "BackBarButtonItem.h"
@@ -39,9 +40,6 @@
 #pragma mark JAVASCRIPT KEYS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-
-//COBALT VERSION
-#define IOSCurrentVersion                   @"0.5.1"
 
 // GENERAL
 #define kJSAction                           @"action"
@@ -58,7 +56,6 @@
 
 // CALLBACK
 #define JSTypeCallBack                      @"callback"
-#define JSCallbackSimpleAcquitment          @"callbackSimpleAcquitment"
 
 // COBALT IS READY
 #define JSTypeCobaltIsReady                 @"cobaltIsReady"
@@ -142,8 +139,13 @@
 #define JSTypeWebLayer                      @"webLayer"
 #define JSActionWebLayerShow                @"show"
 #define JSActionWebLayerDismiss             @"dismiss"
+#define JSActionWebLayerBringToFront        @"bringToFront"
+#define JSActionWebLayerSendToBack          @"sendToBack"
 #define kJSWebLayerFadeDuration             @"fadeDuration"
 #define JSEventWebLayerOnDismiss            @"onWebLayerDismissed"
+#define JSEventWebLayerOnLoading            @"onWebLayerLoading"
+#define JSEventWebLayerOnLoaded             @"onWebLayerLoaded"
+#define JSEventWebLayerOnLoadFailed         @"onWebLayerLoadFailed"
 #define kJSIsWebLayer                       @"isWebLayer"
 
 //INTENT
@@ -181,28 +183,23 @@
 
 @end
 
-@protocol CobaltViewControllerJS <JSExport>
-
-- (BOOL)onCobaltMessage:(NSString *)message;
-
-@end
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma mark INTERFACE
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-typedef enum {
-    WEB_VIEW,
-    WEB_LAYER
-} WebViewType;
+enum {
+    WEB_VIEW = 0,
+    WEB_LAYER = 1
+};
+typedef NSInteger WebViewType;
 
 /*!
  @class			CobaltViewController
  @abstract		Base class for a webView controller that allows javascript/native dialogs
  */
-@interface CobaltViewController : UIViewController <UIAlertViewDelegate, UIScrollViewDelegate, UIWebViewDelegate, CobaltToastDelegate, CobaltViewControllerJS, CobaltBarButtonItemDelegate, BackBarButtonItemDelegate>
+@interface CobaltViewController : UIViewController <UIScrollViewDelegate, UIWebViewDelegate, CobaltAlertDelegate, CobaltToastDelegate, CobaltBarButtonItemDelegate, BackBarButtonItemDelegate>
 {
     // Javascript queues
     NSOperationQueue * toJavaScriptOperationQueue;
@@ -237,12 +234,6 @@ typedef enum {
 @property (strong, nonatomic) IBOutlet UIWebView * webView;
 
 /*!
- @property		activityIndicator
- @abstract		an activity indicator shown- while the webView is loading
- */
-@property (strong, nonatomic) UIActivityIndicatorView * activityIndicator;
-
-/*!
  @property		pageName
  @abstract		the name of the HTML file with the content to display in the webview
  @discussion    the file must be located at ressourcePath
@@ -262,6 +253,18 @@ typedef enum {
  @abstract             a refresh control shown for Pull-to-refresh feature
  */
 @property (strong, nonatomic) UIRefreshControl *refreshControl;
+
+/*!
+ @property		background
+ @abstract		background color of the WebView
+ */
+@property (strong, nonatomic) UIColor *background;
+
+/*!
+ @property		scrollsToTop
+ @abstract		allows or not the scrollsToTop functionality
+ */
+@property BOOL scrollsToTop;
 
 /*!
  @property		isPullToRefreshEnabled
@@ -301,7 +304,7 @@ typedef enum {
        andController:(nullable NSString *)controller;
     
 /*!
- @method		- (void)setDelegate:(id)delegate
+ @method		- (void)setDelegate:(id<CobaltDelegate>)delegate
  @abstract		this method sets the delegate which responds to CobaltDelegate protocol
  */
 - (void)setDelegate:(id<CobaltDelegate>)delegate;
@@ -373,11 +376,22 @@ typedef enum {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
+#pragma mark LIFECYCLE
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (void)onAppStarted:(NSNotification *)notification;
+- (void)onAppBackground:(NSNotification *)notification;
+- (void)onAppForeground:(NSNotification *)notification;
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+
 #pragma mark BARS
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)configureBars;
+- (void)resetBars;
 - (void)setBarButtonItems;
 - (CobaltBarButtonItem *)barButtonItemForAction:(NSDictionary *)action;
 
